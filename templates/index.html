@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control ESP32</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 style="margin-top: 50px;">Grafice</h2>
+        <div class="charts-container">
+            <!-- Primul rând de grafice -->
+            <div class="chart-row">
+                <div class="chart">
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+                <div class="chart">
+                    <canvas id="humidityChart"></canvas>
+                </div>
+            </div>
+            <!-- Al doilea rând de grafice -->
+            <div class="chart-row">
+                <div class="chart">
+                    <canvas id="lightChart"></canvas>
+                </div>
+                <div class="chart">
+                    <canvas id="soilMoistureChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="data-buttons">
+            <div class="data-group">
+                <p>Temperatura: <span id="temperature">{{ data.temperature }}</span> °C</p>
+                <form method="post" action="/command/temperature">
+                    <button type="submit">Temperatura</button>
+                </form>
+            </div>
+            <div class="data-group">
+                <p>Umiditate: <span id="humidity">{{ data.humidity }}</span> %</p>
+                <form method="post" action="/command/humidity">
+                    <button type="submit">Umiditatea aerului</button>
+                </form>
+            </div>
+            <div class="data-group">
+                <p>Lumina: <span id="light">{{ data.light_level }}</span> lx</p>
+                <form method="post" action="/command/light_level">
+                    <button type="submit">Lumina</button>
+                </form>
+            </div>
+            <div class="data-group">
+                <p>Umiditatea solului: <span id="soil_moisture">{{ data.soil_moisture }}</span></p>
+                <form method="post" action="/command/soil_moisture">
+                    <button type="submit">Umiditatea solului</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const sensorhistory = {{ history | tojson }};
+
+        // Configurarea graficelor
+        const config = (label, data, color) => ({
+            type: 'line',
+            data: {
+                labels: Array(data.length).fill(''),
+                datasets: [{
+                    label: label,
+                    data: data,
+                    borderColor: color,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { display: false },
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        const tempChart = new Chart(
+            document.getElementById('temperatureChart').getContext('2d'),
+            config('Temperatura', sensorhistory.temperature, 'red')
+        );
+        const humidityChart = new Chart(
+            document.getElementById('humidityChart').getContext('2d'),
+            config('Umiditate', sensorhistory.humidity, 'blue')
+        );
+        const lightChart = new Chart(
+            document.getElementById('lightChart').getContext('2d'),
+            config('Lumina', sensorhistory.light_level, 'yellow')
+        );
+        const soilChart = new Chart(
+            document.getElementById('soilMoistureChart').getContext('2d'),
+            config('Umiditatea solului', sensorhistory.soil_moisture, 'green')
+        );
+
+        // Actualizare periodică a graficelor
+        setInterval(async () => {
+            const response = await fetch('/api/data');
+            const newData = await response.json();
+
+            // Adaugă valori noi în grafice
+            if (newData) {
+                ['temperature', 'humidity', 'light_level', 'soil_moisture'].forEach((key, index) => {
+                    const chart = [tempChart, humidityChart, lightChart, soilChart][index];
+                    chart.data.datasets[0].data.push(newData[key]);
+                    if (chart.data.datasets[0].data.length > 20) {
+                        chart.data.datasets[0].data.shift();
+                    }
+                    chart.update();
+                });
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

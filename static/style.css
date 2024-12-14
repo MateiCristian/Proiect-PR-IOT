@@ -1,0 +1,91 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('/static/sera.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 80%; /* Adaugă această linie pentru lățimea containerului */
+    max-width: 1200px; /* O limită maximă pentru lățime */
+    margin: 0 auto; /* Centrare pe ecran */
+}
+
+
+.data-buttons {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.data-group {
+    text-align: center;
+    margin: 10px;
+}
+
+.data-group p {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:nth-child(1) {
+    background-color: #ff5722; /* Portocaliu */
+}
+
+button[type="submit"]:nth-child(2) {
+    background-color: #03a9f4; /* Albastru */
+}
+
+button[type="submit"]:nth-child(3) {
+    background-color: #8bc34a; /* Verde */
+}
+
+button[type="submit"]:nth-child(4) {
+    background-color: #ffc107; /* Galben */
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.charts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Spațiu între rânduri */
+    margin-bottom: 0px; /* Spațiu între grafice și secțiunea următoare */
+    margin-top: 0px;
+}
+
+.chart-row {
+    display: flex;
+    justify-content: space-around; /* Împărțirea uniformă a spațiului între grafice */
+    gap: 0px; /* Spațiu între grafice */
+}
+
+.chart {
+    flex: 1; /* Graficele vor avea dimensiuni egale */
+    max-width: 45%; /* Dimensiune maximă pentru fiecare grafic */
+    height: 300px; /* Înălțimea fiecărui grafic */
+}
