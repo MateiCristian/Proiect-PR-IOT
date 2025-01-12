@@ -8,6 +8,7 @@ const char* ssid = "iPhone - Matei";
 const char* password = "matei2301";
 const char* serverUrl = "http://172.20.10.8:5000/api/data";
 const char* commandUrl = "http://172.20.10.8:5000/api/command";
+const char* apiToken = "xrZQcxrzjAup!5I&";  
 
 // Configurare senzori
 #define DHTPIN 4
@@ -63,6 +64,7 @@ void sendSensorData() {
     HTTPClient http;
     http.begin(serverUrl);
     http.addHeader("Content-Type", "application/json");
+    http.addHeader("Authorization", apiToken);  // Adaugă antetul cu token-ul
 
     String payload = "{\"temperature\":" + String(temp) + 
                      ",\"humidity\":" + String(humidity) + 
@@ -78,6 +80,7 @@ void receiveCommand() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.begin(commandUrl);
+    http.addHeader("Authorization", apiToken);  // Adaugă token-ul de autentificare
     int httpResponseCode = http.GET();
 
      if (httpResponseCode == 200) {
@@ -105,5 +108,5 @@ void receiveCommand() {
 void loop() {
   sendSensorData();
   receiveCommand();
-  delay(10000);  // Ajustează intervalul de actualizare
+  delay(60000);  // Ajustează intervalul de actualizare
 }

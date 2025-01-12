@@ -1,6 +1,8 @@
 # Proiect-PR-IOT
 Sistem de monitorizare pentru o seră inteligentă
 
+Link Github: https://github.com/MateiCristian/Proiect-PR-IOT.git
+
 1. Introducere
 Descriere generală:
     Proiectul presupune dezvoltarea unui sistem de monitorizare și control bazat pe microcontroller-ul ESP32, 
